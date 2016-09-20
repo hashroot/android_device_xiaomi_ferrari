@@ -14,7 +14,9 @@ PRODUCT_COPY_FILES += \
 
 # Properties
 PRODUCT_PROPERTY_OVERRIDES += \
+    persist.audio.dirac.speaker=true \
     ro.qc.sdk.audio.fluencetype=fluence \
     persist.audio.fluence.voicecall=true \
     persist.audio.fluence.voicerec=false \
-    persist.audio.fluence.speaker=false
+    audio.dolby.ds2.enabled=true \
+    persist.audio.fluence.speaker=true
