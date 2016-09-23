@@ -34,8 +34,6 @@
 #include <pthread.h>
 #include <inttypes.h>
 #include <media/msmb_camera.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define CAM_MAX_NUM_BUFS_PER_STREAM  (24)
 #define MAX_METADATA_PAYLOAD_SIZE    (1024)
@@ -59,7 +57,7 @@
 #define MAX_NUM_STREAMS          8
 #define CHROMATIX_SIZE 21292
 #define COMMONCHROMATIX_SIZE 42044
-#define AFTUNE_SIZE 5000  //sizeof(actuator_driver_params_t) + sizeof(af_algo_tune_parms_t)
+#define AFTUNE_SIZE 5200  //sizeof(actuator_driver_params_t) + sizeof(af_algo_tune_parms_t)
 #define MAX_SCALE_SIZES_CNT 8
 #define MAX_SAMP_DECISION_CNT     64
 
@@ -901,7 +899,22 @@ typedef struct {
     cam_flash_mode_t flash_mode;
     cam_sensor_t sens_type;
     float aperture_value;
+    float            focal_length;
+    float            f_number;
+    int              sensing_method;
+    float            crop_factor;
 } cam_sensor_params_t;
+
+typedef enum {
+    CAM_METERING_MODE_UNKNOWN = 0,
+    CAM_METERING_MODE_AVERAGE = 1,
+    CAM_METERING_MODE_CENTER_WEIGHTED_AVERAGE = 2,
+    CAM_METERING_MODE_SPOT = 3,
+    CAM_METERING_MODE_MULTI_SPOT = 4,
+    CAM_METERING_MODE_PATTERN = 5,
+    CAM_METERING_MODE_PARTIAL = 6,
+    CAM_METERING_MODE_OTHER = 255,
+} cam_metering_mode_t;
 
 typedef struct {
     float exp_time;
@@ -911,6 +924,11 @@ typedef struct {
     uint32_t settled;
     uint32_t exp_index;
     uint32_t line_count;
+    uint32_t metering_mode;
+    uint32_t exposure_program;
+    uint32_t exposure_mode;
+    uint32_t scenetype;
+    float brightness;
 } cam_ae_params_t;
 
 typedef struct {
@@ -1167,6 +1185,7 @@ typedef enum {
     CAM_INTF_PARM_CDS_MODE,
     CAM_INTF_PARM_WB_MANUAL,
     CAM_INTF_PARM_LONGSHOT_ENABLE,
+    CAM_INTF_PARM_LOW_POWER_ENABLE,
 
     /* stream based parameters */
     CAM_INTF_PARM_DO_REPROCESS,
@@ -1477,7 +1496,7 @@ typedef struct {
 #define CAM_QCOM_FEATURE_FACE_DETECTION (1U<<0)
 #define CAM_QCOM_FEATURE_DENOISE2D      (1U<<1)
 #define CAM_QCOM_FEATURE_CROP           (1U<<2)
-#define CAM_QCOM_FEATURE_CPP            (1U<<3)
+#define CAM_QCOM_FEATURE_ROTATION       (1U<<3)
 #define CAM_QCOM_FEATURE_FLIP           (1U<<4)
 #define CAM_QCOM_FEATURE_HDR            (1U<<5)
 #define CAM_QCOM_FEATURE_REGISTER_FACE  (1U<<6)
@@ -1495,6 +1514,7 @@ typedef struct {
 #define CAM_QCOM_FEATURE_FSSR           (1U<<18)
 #define CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS (1U<<19)
 #define CAM_QCOM_FEATURE_SENSOR_HDR     (1U<<20)
+#define CAM_QCOM_FEATURE_REFOCUS        (1U<<21)
 
 // Debug mask
 #define HAL_DEBUG_MASK_HAL                 (1U<<0)
