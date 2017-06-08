@@ -35,3 +35,4 @@ ifneq ($(SIGN_BUILD),true)
 PRODUCT_BUILD_PROP_OVERRIDES += \
       BUILD_FINGERPRINT="Xiaomi/ferrari/ferrari:5.1.1/LMY48B:userdebug/test-keys" \
     PRIVATE_BUILD_DESC="ferrari-userdebug 5.1.1 LMY48B test-keys"
+endif
