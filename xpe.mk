@@ -1,7 +1,7 @@
 $(call inherit-product, device/xiaomi/ferrari/full_ferrari.mk)
 
 # Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+$(call inherit-product, vendor/xpe/config/common_full_phone.mk)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := ferrari
